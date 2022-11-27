@@ -17,6 +17,7 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("dev.sublab:common-kotlin:1.0.0")
+    implementation("dev.sublab:hashing-kotlin:1.0.0")
     implementation("cafe.cryptography:curve25519-elisabeth:0.1.0")
 }
 
