@@ -1,7 +1,8 @@
 package dev.sublab.sr25519
 
-import cafe.cryptography.curve25519.CompressedRistretto
-import cafe.cryptography.curve25519.Scalar
+import dev.sublab.curve25519.ristrettoElement.CompressedRistretto
+import dev.sublab.curve25519.scalar.Scalar
+import dev.sublab.curve25519.scalar.functions.toScalarBytesModOrderWide
 import dev.sublab.merlin.Transcript
 import dev.sublab.merlin.TranscriptImpl
 import dev.sublab.merlin.TranscriptRngBuilder
@@ -30,7 +31,7 @@ class SigningTranscript(private val transcript: TranscriptImpl): Transcript {
     fun witnessScalar(label: ByteArray, nonceSeeds: ByteArray): Scalar {
         val scalarBytes = ByteArray(64)
         witnessBytes(label, scalarBytes, nonceSeeds)
-        return Scalar.fromBytesModOrderWide(scalarBytes)
+        return scalarBytes.toScalarBytesModOrderWide()
     }
 
     @Throws(Exception::class)
@@ -48,9 +49,9 @@ class SigningTranscript(private val transcript: TranscriptImpl): Transcript {
 
     @Throws(Exception::class)
     fun challengeScalar(label: ByteArray): Scalar {
-        val buf = ByteArray(64)
-        transcript.challengeBytes(label, buf)
-        return Scalar.fromBytesModOrderWide(buf)
+        val buffer = ByteArray(64)
+        transcript.challengeBytes(label, buffer)
+        return buffer.toScalarBytesModOrderWide()
     }
 
     override fun appendMessage(label: ByteArray, message: ByteArray)

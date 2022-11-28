@@ -8,10 +8,6 @@ import kotlin.test.assertEquals
 class Test {
     private val goodContext = "good".toByteArray()
 
-    /**
-     * Whole test takes around 3min 40sec on Mac with M1 Max 10-Core CPU Chip and 64Gb RAM,
-     * please consider higher times on weaker devices
-     */
     @Test
     internal fun test() {
         for (i in 0 until Constants.TESTS_COUNT) {

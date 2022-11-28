@@ -60,7 +60,7 @@ class Strobe128(protocol: ByteArray): Cloneable {
     }
 
     private fun absorb(data: ByteArray) {
-        for ((i, byte) in data.withIndex()) {
+        for (byte in data) {
             state[pos] = (state[pos].toInt() xor byte.toInt()).toByte()
             pos += 1
 

@@ -1,8 +1,11 @@
 package dev.sublab.sr25519
 
-import cafe.cryptography.curve25519.Constants
-import cafe.cryptography.curve25519.Scalar
 import dev.sublab.common.ByteArrayConvertible
+import dev.sublab.curve25519.ristrettoElement.RistrettoElement.Companion.RISTRETTO_GENERATOR_TABLE
+import dev.sublab.curve25519.scalar.Scalar
+import dev.sublab.curve25519.scalar.functions.multiplyAndAdd
+import dev.sublab.curve25519.scalar.functions.toScalarBytesModOrderWide
+import dev.sublab.curve25519.scalar.functions.toScalarFromBits
 import kotlin.random.Random
 
 /// The length of the "key" portion of a Ristretto Schnorr secret key, in bytes.
@@ -72,7 +75,7 @@ class SecretKey(
             val nonce = random.nextBytes(32)
 
             return SecretKey(
-                Scalar.fromBytesModOrderWide(key).toByteArray(),
+                key.toScalarBytesModOrderWide().toByteArray(),
                 nonce
             )
         }
@@ -101,7 +104,7 @@ class SecretKey(
      * Derive the `PublicKey` corresponding to this `SecretKey`.
      */
     fun toPublicKey()
-        = PublicKey(Constants.RISTRETTO_GENERATOR_TABLE.multiply(Scalar.fromBits(key)))
+        = PublicKey(RISTRETTO_GENERATOR_TABLE.multiply(key.toScalarFromBits()))
 
     /**
      * Derive the `PublicKey` corresponding to this `SecretKey`.
@@ -128,12 +131,12 @@ class SecretKey(
 
         // context, message, A/public_key
         var r = t.witnessScalar("signing".toByteArray(), nonce)
-        val R = Constants.RISTRETTO_GENERATOR_TABLE.multiply(r).compress()
+        val R = RISTRETTO_GENERATOR_TABLE.multiply(r).compress()
         t.commitPoint("sign:R".toByteArray(), R)
 
         // context, message, A/public_key, R=rG
-        val k: Scalar = t.challengeScalar("sign:c".toByteArray())
-        val s = k.multiplyAndAdd(Scalar.fromBits(key), r)
+        val k = t.challengeScalar("sign:c".toByteArray())
+        val s = k.multiplyAndAdd(key.toScalarFromBits(), r)
 
         Scalar.ZERO.also { r = it }
 

@@ -1,10 +1,9 @@
 package dev.sublab.sr25519
 
-import cafe.cryptography.curve25519.Scalar
 import dev.sublab.common.ByteArrayConvertible
+import dev.sublab.curve25519.scalar.functions.toScalarBytesModOrderWide
 import dev.sublab.hashing.hashers.sha512
 import dev.sublab.hashing.hashing
-import dev.sublab.merlin.Transcript
 import dev.sublab.merlin.TranscriptImpl
 import kotlin.random.Random
 
@@ -62,7 +61,7 @@ class MiniSecretKey private constructor(private val seed: ByteArray): ByteArrayC
         val scalarBytes = ByteArray(64)
         t.challengeBytes("sk".toByteArray(), scalarBytes)
 
-        val key = Scalar.fromBytesModOrderWide(scalarBytes).toByteArray()
+        val key = scalarBytes.toScalarBytesModOrderWide().toByteArray()
 
         val nonce = ByteArray(32)
         t.challengeBytes("no".toByteArray(), nonce)

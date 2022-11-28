@@ -1,10 +1,9 @@
 package dev.sublab.sr25519
 
-import cafe.cryptography.curve25519.CompressedRistretto
-import cafe.cryptography.curve25519.Constants
-import cafe.cryptography.curve25519.RistrettoElement
-import cafe.cryptography.curve25519.Scalar
 import dev.sublab.common.ByteArrayConvertible
+import dev.sublab.curve25519.ristrettoElement.CompressedRistretto
+import dev.sublab.curve25519.ristrettoElement.RistrettoElement
+import dev.sublab.curve25519.ristrettoElement.RistrettoElement.Companion.RISTRETTO_GENERATOR_TABLE
 
 const val PUBLIC_KEY_LENGTH = 32
 
@@ -44,8 +43,8 @@ class PublicKey(private val ristretto: RistrettoElement): Verifier, ByteArrayCon
         t.commitPoint("sign:pk".toByteArray(), asCompressed())
         t.commitPoint("sign:R".toByteArray(), signature.R)
 
-        val k: Scalar = t.challengeScalar("sign:c".toByteArray())
-        val R = Constants.RISTRETTO_GENERATOR_TABLE.multiply(signature.s).subtract(ristretto.multiply(k))
+        val k = t.challengeScalar("sign:c".toByteArray())
+        val R = RISTRETTO_GENERATOR_TABLE.multiply(signature.s).subtract(ristretto.multiply(k))
 
         return R.compress() == signature.R
     }

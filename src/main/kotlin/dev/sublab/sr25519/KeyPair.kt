@@ -1,6 +1,5 @@
 package dev.sublab.sr25519
 
-import cafe.cryptography.curve25519.*
 import dev.sublab.common.ByteArrayConvertible
 import kotlin.random.Random
 

@@ -1,8 +1,9 @@
 package dev.sublab.sr25519
 
-import cafe.cryptography.curve25519.CompressedRistretto
-import cafe.cryptography.curve25519.Scalar
 import dev.sublab.common.ByteArrayConvertible
+import dev.sublab.curve25519.ristrettoElement.CompressedRistretto
+import dev.sublab.curve25519.scalar.Scalar
+import dev.sublab.curve25519.scalar.functions.toScalarCanonicalBytes
 
 /// The length of a curve25519 EdDSA `Signature`, in bytes.
 const val SIGNATURE_LENGTH = 64
@@ -50,7 +51,7 @@ class Signature(
             }
 
             upper[31] = (upper[31].toInt() and 127).toByte()
-            return Signature(CompressedRistretto(lower), Scalar.fromCanonicalBytes(upper))
+            return Signature(CompressedRistretto(lower), upper.toScalarCanonicalBytes())
         }
     }
     /**
