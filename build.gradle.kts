@@ -12,6 +12,7 @@ version = "1.0.0"
 repositories {
     mavenLocal()
     mavenCentral()
+    maven { url = uri("https://repo.repsy.io/mvn/chrynan/public") } // Kotlin SecureRandom
 }
 
 dependencies {
@@ -19,6 +20,7 @@ dependencies {
     implementation("dev.sublab:common-kotlin:1.0.0")
     implementation("dev.sublab:hashing-kotlin:1.0.0")
     implementation("dev.sublab:curve25519-kotlin:1.0.0")
+    implementation("com.chrynan.krypt:krypt-csprng:0.2.1")
 }
 
 tasks.test {

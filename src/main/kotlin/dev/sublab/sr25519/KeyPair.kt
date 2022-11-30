@@ -1,5 +1,6 @@
 package dev.sublab.sr25519
 
+import com.chrynan.krypt.csprng.SecureRandom
 import dev.sublab.common.ByteArrayConvertible
 import kotlin.random.Random
 
@@ -63,7 +64,7 @@ class KeyPair(
         /**
          * Generate a Ristretto Schnorr `Keypair` directly, bypassing the `MiniSecretKey` layer.
          */
-        fun generate() = generateWith(Random.Default)
+        fun generate() = generateWith(SecureRandom())
 
         /**
          * Generate a Ristretto Schnorr `Keypair` directly, from a user supplied `csprng`,

@@ -1,5 +1,6 @@
 package dev.sublab.sr25519
 
+import com.chrynan.krypt.csprng.SecureRandom
 import dev.sublab.common.ByteArrayConvertible
 import dev.sublab.curve25519.ristrettoElement.RistrettoElement.Companion.RISTRETTO_GENERATOR_TABLE
 import dev.sublab.curve25519.scalar.Scalar
@@ -63,7 +64,7 @@ class SecretKey(
         /**
          * Generate an "unbiased" `SecretKey` directly, bypassing the `MiniSecretKey` layer.
          */
-        fun generate() = generateWith(Random.Default)
+        fun generate() = generateWith(SecureRandom())
 
         /**
          * Generate an "unbiased" `SecretKey` directly from a user

@@ -1,5 +1,6 @@
 package dev.sublab.sr25519
 
+import com.chrynan.krypt.csprng.SecureRandom
 import dev.sublab.curve25519.ristrettoElement.CompressedRistretto
 import dev.sublab.curve25519.scalar.Scalar
 import dev.sublab.curve25519.scalar.functions.toScalarBytesModOrderWide
@@ -36,7 +37,7 @@ class SigningTranscript(private val transcript: TranscriptImpl): Transcript {
 
     @Throws(Exception::class)
     fun witnessBytes(label: ByteArray, dest: ByteArray, nonceSeeds: ByteArray) {
-        witnessBytesRng(label, dest, nonceSeeds, Random.Default)
+        witnessBytesRng(label, dest, nonceSeeds, SecureRandom())
     }
 
     @Throws(Exception::class)

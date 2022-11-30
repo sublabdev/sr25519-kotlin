@@ -1,5 +1,6 @@
 package dev.sublab.merlin
 
+import com.chrynan.krypt.csprng.SecureRandom
 import dev.sublab.common.numerics.toByteArray
 import kotlin.random.Random
 
@@ -12,7 +13,7 @@ class TranscriptRngBuilder(private val strobe: Strobe128) {
     }
 
     @Throws(Exception::class)
-    fun finalize() = finalizeWith(Random.Default)
+    fun finalize() = finalizeWith(SecureRandom())
 
     @Throws(Exception::class)
     fun <R: Random> finalizeWith(random: R): TranscriptRng {

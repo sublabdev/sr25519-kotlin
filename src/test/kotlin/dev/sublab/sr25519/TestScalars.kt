@@ -1,5 +1,6 @@
 package dev.sublab.sr25519
 
+import com.chrynan.krypt.csprng.SecureRandom
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -68,14 +69,14 @@ class TestScalars {
     @Test
     fun cofactorAdjustment() {
         run {
-            val x = Random.Default.nextBytes(Constants.SCALAR_SIZE)
+            val x = SecureRandom().nextBytes(Constants.SCALAR_SIZE)
             x[31] = (x[31].toInt() and 0b00011111).toByte()
             val y = divideScalarBytesByCofactor(multiplyScalarBytesByCofactor(x))
             assertContentEquals(x, y)
         }
 
         run {
-            val x = Random.Default.nextBytes(Constants.SCALAR_SIZE)
+            val x = SecureRandom().nextBytes(Constants.SCALAR_SIZE)
             x[0] = (x[31].toInt() and 0b11111000).toByte()
             val y = multiplyScalarBytesByCofactor(divideScalarBytesByCofactor(x))
             assertContentEquals(x, y)

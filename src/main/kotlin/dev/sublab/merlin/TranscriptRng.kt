@@ -1,7 +1,6 @@
 package dev.sublab.merlin
 
 import dev.sublab.common.numerics.toByteArray
-import java.security.SecureRandom
 import kotlin.random.Random
 
 class TranscriptRng(private val strobe: Strobe128) {

@@ -1,5 +1,6 @@
 package dev.sublab.sr25519
 
+import com.chrynan.krypt.csprng.SecureRandom
 import dev.sublab.common.ByteArrayConvertible
 import dev.sublab.curve25519.scalar.functions.toScalarBytesModOrderWide
 import dev.sublab.hashing.hashers.sha512
@@ -38,7 +39,7 @@ class MiniSecretKey private constructor(private val seed: ByteArray): ByteArrayC
         /**
          * Generate a `MiniSecretKey` from default `csprng`.
          */
-        fun generate() = generateWith(Random.Default)
+        fun generate() = generateWith(SecureRandom())
 
         /**
          * Generate a `MiniSecretKey` from a `csprng`.
