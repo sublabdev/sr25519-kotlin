@@ -11,7 +11,7 @@ private const val FLAG_T = 1 shl 3
 private const val FLAG_M = 1 shl 4
 private const val FLAG_K = 1 shl 5
 
-class Strobe128(protocol: ByteArray): Cloneable {
+class Strobe128(protocol: ByteArray, clone: Boolean = false): Cloneable {
     private var state: ByteArray = ByteArray(200).let { state ->
         byteArrayOf(1, (STROBE_R + 2).toByte(), 1, 0, 1, 96).copyInto(state)
         "STROBEv1.0.2".toByteArray().copyInto(state, 6)
@@ -19,12 +19,14 @@ class Strobe128(protocol: ByteArray): Cloneable {
     }
 
     init {
-        metaAd(protocol, false)
+        if (!clone) {
+            metaAd(protocol, false)
+        }
     }
 
-    private var pos = 0
-    private var posBegin = 0
-    private var curFlags = 0
+    internal var pos = 0
+    internal var posBegin = 0
+    internal var curFlags = 0
 
     @Throws(Exception::class)
     fun metaAd(data: ByteArray, more: Boolean) {
@@ -61,7 +63,7 @@ class Strobe128(protocol: ByteArray): Cloneable {
 
     private fun absorb(data: ByteArray) {
         for (byte in data) {
-            state[pos] = (state[pos].toInt() xor byte.toInt()).toByte()
+            state[pos] = (state[pos].toInt() xor byte.toUByte().toInt()).toByte()
             pos += 1
 
             if (pos == STROBE_R) {
@@ -114,13 +116,13 @@ class Strobe128(protocol: ByteArray): Cloneable {
         absorb(byteArrayOf(oldBegin.toByte(), flags.toByte()))
 
         // Force running F if C or K is set
-        val forceF = 0 != flags and (FLAG_C or FLAG_K)
+        val forceF = 0 != (flags and (FLAG_C or FLAG_K))
         if (forceF && pos != 0) {
             runF()
         }
     }
 
-    public override fun clone() = Strobe128(ByteArray(200)).let { strobe ->
+    public override fun clone() = Strobe128(byteArrayOf(), true).let { strobe ->
         strobe.curFlags = curFlags
         strobe.pos = pos
         strobe.posBegin = posBegin

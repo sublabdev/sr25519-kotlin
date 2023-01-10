@@ -1,7 +1,6 @@
 package dev.sublab.sr25519
 
 import com.chrynan.krypt.csprng.SecureRandom
-import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 
