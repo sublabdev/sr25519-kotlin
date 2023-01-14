@@ -8,6 +8,11 @@ const val KEYPAIR_LENGTH = SECRET_KEY_LENGTH + PUBLIC_KEY_LENGTH
 
 private const val DESCRIPTION = "A 96 bytes Ristretto Schnorr keypair"
 
+/**
+ * A key pair object containing a secret key and a public key
+ * @property secretKey A secret key
+ * @property publicKey A public key
+ */
 class KeyPair(
     val secretKey: SecretKey,
     val publicKey: PublicKey,
@@ -94,21 +99,53 @@ class KeyPair(
      */
     override fun toByteArray() = secretKey.toByteArray() + publicKey.toByteArray()
 
+    /**
+     * Sign a message with a signing transcript
+     * @param t signing transcript
+     * @return A signature
+     */
     override fun sign(t: SigningTranscript)
         = secretKey.sign(t)
 
+    /**
+     * Sign a message with a signing transcript but double check
+     * @param t signing transcript
+     * @return A signature
+     */
     override fun signDoubleCheck(t: SigningTranscript)
         = secretKey.signDoubleCheck(t)
 
+    /**
+     * Sign a message with a context
+     * @param context provided signing context
+     * @param message message to sign
+     * @return A signature
+     */
     override fun signSimple(context: ByteArray, message: ByteArray)
         = secretKey.signSimple(context, message)
 
+    /**
+     * Sign a message with a context but double check
+     * @param context provided signing context
+     * @param message message to sign
+     * @return A signature
+     */
     override fun signSimpleDoubleCheck(context: ByteArray, message: ByteArray)
         = secretKey.signSimpleDoubleCheck(context, message)
 
+    /**
+     * Verify public key and signature
+     * @param t signing transcript
+     * @param signature signature to verify
+     * @return A `Boolean` value indicating whether the verification was successful
+     */
     override fun verify(t: SigningTranscript, signature: Signature)
         = publicKey.verify(t, signature)
 
+    /**
+     *  Verify a signature by this public key on a message.
+     *  @return A `Boolean` value indicating whether the verification was successful
+     */
     override fun verifySimple(context: ByteArray, message: ByteArray, signature: Signature)
         = publicKey.verifySimple(context, message, signature)
 }

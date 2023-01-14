@@ -125,6 +125,10 @@ class SecretKey(
      * should be no attacks even if both the random number generator
      * fails and the function gets called with the wrong public key.
      */
+
+    /**
+     * Sign a message
+     */
     @Throws(Exception::class)
     override fun sign(t: SigningTranscript): Signature {
         t.protoName("Schnorr-sig".toByteArray())

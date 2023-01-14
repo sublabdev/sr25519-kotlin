@@ -18,6 +18,9 @@ import kotlin.random.Random
 class SigningTranscript(private val transcript: TranscriptImpl): Transcript {
     constructor(label: ByteArray) : this(TranscriptImpl(label))
 
+    /**
+     * Appends a proto-name to the transcript
+     */
     @Throws(Exception::class)
     fun protoName(label: ByteArray) {
         transcript.appendMessage("proto-name".toByteArray(), label)
@@ -55,16 +58,28 @@ class SigningTranscript(private val transcript: TranscriptImpl): Transcript {
         return buffer.toScalarBytesModOrderWide()
     }
 
+    /**
+     * Appends a message to the transcript
+     */
     override fun appendMessage(label: ByteArray, message: ByteArray)
         = transcript.appendMessage(label, message)
-
+]
+    /**
+     * Appends a `Long` to the transcript
+     */
     override fun appendUInt64(label: ByteArray, x: Long)
         = transcript.appendUInt64(label, x)
 
     override fun challengeBytes(label: ByteArray, destination: ByteArray)
         = transcript.challengeBytes(label, destination)
 
+    /**
+     * Builds `Rng`
+     */
     override fun buildRng() = transcript.buildRng()
 
+    /**
+     * Clones the transcript
+     */
     public override fun clone() = SigningTranscript(transcript.clone())
 }
