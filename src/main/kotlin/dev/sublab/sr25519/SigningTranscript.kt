@@ -81,7 +81,7 @@ class SigningTranscript(private val transcript: TranscriptImpl): Transcript {
      */
     override fun appendMessage(label: ByteArray, message: ByteArray)
         = transcript.appendMessage(label, message)
-]
+    
     /**
      * Appends a `Long` to the transcript
      */
