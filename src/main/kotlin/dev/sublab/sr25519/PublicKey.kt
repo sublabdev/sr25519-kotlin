@@ -25,7 +25,7 @@ import dev.sublab.curve25519.ristrettoElement.RistrettoElement.Companion.RISTRET
 
 const val PUBLIC_KEY_LENGTH = 32
 
-class PublicKey(private val ristretto: RistrettoElement): Verifier, ByteArrayConvertible {
+class PublicKey(val ristretto: RistrettoElement): Verifier, ByteArrayConvertible {
     companion object {
         /**
          * Decompress into the [PublicKey] format that also retains the compressed form.

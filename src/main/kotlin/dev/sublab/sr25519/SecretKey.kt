@@ -45,7 +45,7 @@ class SecretKey(
     companion object {
         /**
          * Construct an [SecretKey] from a slice of bytes, corresponding to
-         * an [Ed25519] expanded secret key.
+         * an ed25519 expanded secret key.
          * @param byteArray a [ByteArray] used to generate [SecretKey]
          * @return A newly constructed [SecretKey] from bytes
          */
@@ -60,7 +60,7 @@ class SecretKey(
 
         /**
          * Construct an `SecretKey` from a slice of bytes, corresponding to
-         * an [Ed25519] expanded secret key.
+         * an ed25519 expanded secret key.
          * @param byteArray a [ByteArray] used to generate [SecretKey]
          * A newly constructed [SecretKey] from bytes
          */
@@ -90,7 +90,7 @@ class SecretKey(
 
         /**
          * Generate an "unbiased" [SecretKey] directly from a user
-         * supplied [csprng] uniformly, bypassing the [MiniSecretKey]
+         * supplied [Random] uniformly, bypassing the [MiniSecretKey]
          * layer.
          */
         fun <R: Random> generateWith(random: R): SecretKey {
@@ -109,7 +109,7 @@ class SecretKey(
      *
      * Returns an array of 64 bytes, with the first 32 bytes being
      * the secret scalar represented canonically, and the last
-     * 32 bytes being the seed for [nonces].
+     * 32 bytes being the seed for nonces.
      */
     override fun toByteArray() = key.copyOf() + nonce.copyOf()
 
@@ -119,7 +119,7 @@ class SecretKey(
      *
      * Returns an array of 64 bytes, with the first 32 bytes being
      * the secret scalar shifted ed25519 style, and the last 32 bytes
-     * being the seed for [nonces].
+     * being the seed for nonces.
      */
     fun toEd25519ByteArray() = multiplyScalarBytesByCofactor(key.copyOf()) + nonce.copyOf()
 

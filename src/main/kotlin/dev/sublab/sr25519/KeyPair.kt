@@ -54,7 +54,7 @@ class KeyPair(
          * and then the corresponding Ristretto `PublicKey`.
          *
          * @throws SignatureError if [byteArray] size is not equal to [KEYPAIR_LENGTH]
-         * @return EdDSA [Keypair]
+         * @return EdDSA [KeyPair]
          */
         @Throws(Exception::class)
         fun fromByteArray(byteArray: ByteArray): KeyPair {
@@ -67,7 +67,7 @@ class KeyPair(
         }
 
         /**
-         * Deserialize a [KeyPair] from bytes with [Ed25519] style [SecretKey] format.
+         * Deserialize a [KeyPair] from bytes with ed25519 style [SecretKey] format.
          *
          * @param byteArray a [ByteArray] representing the scalar for the secret key,
          * and then the corresponding Ristretto [PublicKey].
@@ -75,7 +75,7 @@ class KeyPair(
          * @throws SignatureError if [byteArray] size is not equal to [KEYPAIR_LENGTH]
          * @return EdDSA `Keypair`
          */
-        fun fromHalfEd25519Bytes(byteArray: ByteArray): KeyPair {
+        fun fromEd25519ByteArray(byteArray: ByteArray): KeyPair {
             checkByteArray(byteArray)
 
             val secretKey = SecretKey.fromEd25519ByteArray(byteArray.copyOf(SECRET_KEY_LENGTH))
@@ -85,12 +85,12 @@ class KeyPair(
         }
 
         /**
-         * Generate a Ristretto Schnorr [Keypair] directly, bypassing the [MiniSecretKey] layer.
+         * Generate a Ristretto Schnorr [KeyPair] directly, bypassing the [MiniSecretKey] layer.
          */
         fun generate() = generateWith(SecureRandom())
 
         /**
-         * Generate a Ristretto Schnorr [Keypair] directly, from a user supplied [csprng],
+         * Generate a Ristretto Schnorr [KeyPair] directly, from a user supplied [Random],
          * bypassing the `MiniSecretKey` layer.
          */
         fun <R: Random> generateWith(random: R) = SecretKey.generateWith(random).let {
@@ -99,12 +99,12 @@ class KeyPair(
     }
 
     /**
-     * Serialize [KeyPair] to bytes with [Ed25519] secret key format.
+     * Serialize [KeyPair] to bytes with ed25519 secret key format.
      *
      * @returnA [ByteArray] consisting of first a [SecretKey] serialized like Ed25519,
      * and next the Ristretto [PublicKey]
      */
-    fun toHalfEd25519Bytes() = ByteArray(KEYPAIR_LENGTH).apply {
+    fun toEd25519ByteArray() = ByteArray(KEYPAIR_LENGTH).apply {
         secretKey.toEd25519ByteArray().copyInto(this)
         publicKey.toByteArray().copyInto(this, SECRET_KEY_LENGTH)
     }
@@ -126,7 +126,7 @@ class KeyPair(
         = secretKey.sign(t)
 
     /**
-     * Sign a message with a [signing] transcript but double [check]
+     * Sign a message with a [SigningTranscript] but double check
      * @param t signing transcript
      * @return A signature
      */

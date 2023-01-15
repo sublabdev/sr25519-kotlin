@@ -42,9 +42,9 @@ class Strobe128(protocol: ByteArray, clone: Boolean = false): Cloneable {
         }
     }
 
-    internal var pos = 0
-    internal var posBegin = 0
-    internal var curFlags = 0
+    private var pos = 0
+    private var posBegin = 0
+    private var curFlags = 0
 
     @Throws(Exception::class)
     fun metaAd(data: ByteArray, more: Boolean) {

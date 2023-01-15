@@ -139,11 +139,11 @@ class MiniSecretKey private constructor(private val seed: ByteArray): ByteArrayC
     }
 
     /**
-     * Derive the [Keypair] corresponding to this [MiniSecretKey].
+     * Derive the [KeyPair] corresponding to this [MiniSecretKey].
      * @param mode an expansion mode to use
      */
     @Throws(Exception::class)
-    fun expandToKeypair(mode: ExpansionMode) = expand(mode).toKeyPair()
+    fun expandToKeyPair(mode: ExpansionMode) = expand(mode).toKeyPair()
 
     /**
      * Derive the [PublicKey] corresponding to this [MiniSecretKey].

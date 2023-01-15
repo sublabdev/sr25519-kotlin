@@ -67,7 +67,7 @@ class Test {
 
             // Check restoring key pair from ed25519 bytes
             run {
-                val restored = KeyPair.fromHalfEd25519Bytes(keyPair.toHalfEd25519Bytes())
+                val restored = KeyPair.fromEd25519ByteArray(keyPair.toEd25519ByteArray())
                 assertContentEquals(keyPair.toByteArray(), restored.toByteArray())
                 assertContentEquals(keyPair.secretKey.toByteArray(), restored.secretKey.toByteArray())
                 assertContentEquals(keyPair.publicKey.toByteArray(), restored.publicKey.toByteArray())
