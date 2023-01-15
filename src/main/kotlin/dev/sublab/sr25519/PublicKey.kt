@@ -28,12 +28,12 @@ const val PUBLIC_KEY_LENGTH = 32
 class PublicKey(private val ristretto: RistrettoElement): Verifier, ByteArrayConvertible {
     companion object {
         /**
-         * Decompress into the `PublicKey` format that also retains the compressed form.
+         * Decompress into the [PublicKey] format that also retains the compressed form.
          */
         fun fromCompressed(compressed: CompressedRistretto) = PublicKey(compressed.decompress())
 
         /**
-         * Compress into the `PublicKey` format that also retains the uncompressed form.
+         * Compress into the [PublicKey] format that also retains the uncompressed form.
          */
         fun fromByteArray(byteArray: ByteArray) = fromCompressed(CompressedRistretto(byteArray))
     }
@@ -50,6 +50,9 @@ class PublicKey(private val ristretto: RistrettoElement): Verifier, ByteArrayCon
 
     /**
      * Verify a signature by this public key on a transcript.
+     * @param t a signing transcript to use
+     * @param signature signature to verify
+     * @return [Boolean] value indicating verification success
      *
      * Requires a `SigningTranscript`, normally created from a
      * `SigningContext` and a message, as well as the signature
@@ -69,6 +72,10 @@ class PublicKey(private val ristretto: RistrettoElement): Verifier, ByteArrayCon
 
     /**
      * Verify a signature by this public key on a message.
+     * @param context current context
+     * @param message message from which public key is fetched
+     * @param signature signature to verification success
+     * @return [Boolean] value indicating
      */
     override fun verifySimple(context: ByteArray, message: ByteArray, signature: Signature): Boolean {
         val t = SigningContext.fromContext(context).bytes(message)
