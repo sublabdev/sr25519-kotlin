@@ -30,13 +30,13 @@ class KeyPair(
         }
 
         /**
-         * Deserialize a `KeyPair` from bytes.
+         * Deserialize a [KeyPair] from bytes.
          *
-         * @param byteArray a `ByteArray` consisting of byte representations of first a `SecretKey`,
+         * @param byteArray a [ByteArray] consisting of byte representations of first a [SecretKey],
          * and then the corresponding Ristretto `PublicKey`.
          *
-         * @throws SignatureError if `byteArray` size is not equal to `KEYPAIR_LENGTH`
-         * @return EdDSA `Keypair`
+         * @throws SignatureError if [byteArray] size is not equal to [KEYPAIR_LENGTH]
+         * @return EdDSA [Keypair]
          */
         @Throws(Exception::class)
         fun fromByteArray(byteArray: ByteArray): KeyPair {
@@ -49,12 +49,12 @@ class KeyPair(
         }
 
         /**
-         * Deserialize a `KeyPair` from bytes with Ed25519 style `SecretKey` format.
+         * Deserialize a [KeyPair] from bytes with [Ed25519] style [SecretKey] format.
          *
-         * @param byteArray a `ByteArray` representing the scalar for the secret key,
-         * and then the corresponding Ristretto `PublicKey`.
+         * @param byteArray a [ByteArray] representing the scalar for the secret key,
+         * and then the corresponding Ristretto [PublicKey].
          *
-         * @throws SignatureError if `byteArray` size is not equal to `KEYPAIR_LENGTH`
+         * @throws SignatureError if [byteArray] size is not equal to [KEYPAIR_LENGTH]
          * @return EdDSA `Keypair`
          */
         fun fromHalfEd25519Bytes(byteArray: ByteArray): KeyPair {
@@ -67,12 +67,12 @@ class KeyPair(
         }
 
         /**
-         * Generate a Ristretto Schnorr `Keypair` directly, bypassing the `MiniSecretKey` layer.
+         * Generate a Ristretto Schnorr [Keypair] directly, bypassing the [MiniSecretKey] layer.
          */
         fun generate() = generateWith(SecureRandom())
 
         /**
-         * Generate a Ristretto Schnorr `Keypair` directly, from a user supplied `csprng`,
+         * Generate a Ristretto Schnorr [Keypair] directly, from a user supplied [csprng],
          * bypassing the `MiniSecretKey` layer.
          */
         fun <R: Random> generateWith(random: R) = SecretKey.generateWith(random).let {
@@ -81,10 +81,10 @@ class KeyPair(
     }
 
     /**
-     * Serialize `KeyPair` to bytes with Ed25519 secret key format.
+     * Serialize [KeyPair] to bytes with [Ed25519] secret key format.
      *
-     * @returnA `ByteArray` consisting of first a `SecretKey` serialized like Ed25519,
-     * and next the Ristretto `PublicKey`
+     * @returnA [ByteArray] consisting of first a [SecretKey] serialized like Ed25519,
+     * and next the Ristretto [PublicKey]
      */
     fun toHalfEd25519Bytes() = ByteArray(KEYPAIR_LENGTH).apply {
         secretKey.toEd25519ByteArray().copyInto(this)
@@ -92,10 +92,10 @@ class KeyPair(
     }
 
     /**
-     * Serialize `KeyPair` to bytes.
+     * Serialize `[KeyPair]` to bytes.
      *
-     * @return A `ByteArray` consisting of first a `SecretKey` serialized canonically,
-     * and next the Ristretto `PublicKey`
+     * @return A [ByteArray] consisting of first a [SecretKey] serialized canonically,
+     * and next the Ristretto [PublicKey]
      */
     override fun toByteArray() = secretKey.toByteArray() + publicKey.toByteArray()
 
@@ -108,7 +108,7 @@ class KeyPair(
         = secretKey.sign(t)
 
     /**
-     * Sign a message with a signing transcript but double check
+     * Sign a message with a [signing] transcript but double [check]
      * @param t signing transcript
      * @return A signature
      */
@@ -137,14 +137,14 @@ class KeyPair(
      * Verify public key and signature
      * @param t signing transcript
      * @param signature signature to verify
-     * @return A `Boolean` value indicating whether the verification was successful
+     * @return A [Boolean] value indicating whether the verification was successful
      */
     override fun verify(t: SigningTranscript, signature: Signature)
         = publicKey.verify(t, signature)
 
     /**
      *  Verify a signature by this public key on a message.
-     *  @return A `Boolean` value indicating whether the verification was successful
+     *  @return A [Boolean] value indicating whether the verification was successful
      */
     override fun verifySimple(context: ByteArray, message: ByteArray, signature: Signature)
         = publicKey.verifySimple(context, message, signature)

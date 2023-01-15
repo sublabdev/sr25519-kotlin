@@ -21,7 +21,9 @@ enum class ExpansionMode {
 class MiniSecretKey private constructor(private val seed: ByteArray): ByteArrayConvertible {
     companion object {
         /**
-         * Construct a `MiniSecretKey` from a slice of bytes.
+         * Construct a [MiniSecretKey] from a slice of bytes.
+         * @param seed a seed used to construct a mini secret key
+         * @return A mini secret key from the provided seed
          */
         @Throws(SignatureError.BytesLengthError::class)
         fun fromByteArray(seed: ByteArray): MiniSecretKey {
@@ -37,18 +39,20 @@ class MiniSecretKey private constructor(private val seed: ByteArray): ByteArrayC
         }
 
         /**
-         * Generate a `MiniSecretKey` from default `csprng`.
+         * Generate a [MiniSecretKey]` from default `csprng`.
+         * @return A mini secret key
          */
         fun generate() = generateWith(SecureRandom())
 
         /**
-         * Generate a `MiniSecretKey` from a `csprng`.
+         * Generate a [MiniSecretKey] from a `csprng`.
          */
         fun <R: Random> generateWith(random: R) = MiniSecretKey(random.nextBytes(32))
     }
 
     /**
-     * Expand this `MiniSecretKey` into a `SecretKey`
+     * Expand this [MiniSecretKey] into a [SecretKey]
+     * @return A [SecretKey] from expanding [MiniSecretKey]
      *
      * We produce a secret keys using merlin and more uniformly
      * with this method, which reduces binary size and benefits
@@ -71,7 +75,7 @@ class MiniSecretKey private constructor(private val seed: ByteArray): ByteArrayC
     }
 
     /**
-     * Expand this `MiniSecretKey` into a `SecretKey` using
+     * Expand this `MiniSecretKey` into a [SecretKey] using
      * ed25519-style bit clamping.
      *
      * At present, there is no exposed mapping from Ristretto
@@ -101,7 +105,8 @@ class MiniSecretKey private constructor(private val seed: ByteArray): ByteArrayC
     }
 
     /**
-     * Derive the `SecretKey` corresponding to this `MiniSecretKey`.
+     * Derive the [SecretKey] corresponding to this `[MiniSecretKey]`.
+     * @param mode an expansion mode to use
      *
      * We caution that `mode` must always be chosen consistently.
      * We slightly prefer `ExpansionMode::Uniform` here, but both
@@ -116,19 +121,21 @@ class MiniSecretKey private constructor(private val seed: ByteArray): ByteArrayC
     }
 
     /**
-     * Derive the `Keypair` corresponding to this `MiniSecretKey`.
+     * Derive the [Keypair] corresponding to this [MiniSecretKey].
+     * @param mode an expansion mode to use
      */
     @Throws(Exception::class)
     fun expandToKeypair(mode: ExpansionMode) = expand(mode).toKeyPair()
 
     /**
-     * Derive the `PublicKey` corresponding to this `MiniSecretKey`.
+     * Derive the [PublicKey] corresponding to this [MiniSecretKey].
+     * @param mode an expansion mode to use
      */
     @Throws(Exception::class)
     fun expandToPublic(mode: ExpansionMode) = expand(mode).toPublicKey()
 
     /**
-     * Convert this secret key to a byte array.
+     * Convert this secret key to a [ByteArray].
      */
     override fun toByteArray() = seed
 }

@@ -23,6 +23,8 @@ class Signature(
     companion object {
         /**
          * Construct a `Signature` from a slice of bytes.
+         * @param byteArray a [ByteArray] used to create a [Signature]
+         * @return A created [Signature]
          *
          * We distinguish schnorrkel signatures from ed25519 signatures
          * by setting the high bit of byte 31. We return an error if
@@ -55,7 +57,7 @@ class Signature(
         }
     }
     /**
-     * Convert this `Signature` to a byte array.
+     * Convert this [Signature] to a byte array.
      */
     override fun toByteArray() = (R.toByteArray() + s.toByteArray()).apply {
         this[63] = (this[63].toInt() or 128).toByte()

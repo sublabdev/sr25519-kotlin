@@ -26,8 +26,10 @@ class SecretKey(
 ): Signer, ByteArrayConvertible {
     companion object {
         /**
-         * Construct an `SecretKey` from a slice of bytes, corresponding to
-         * an Ed25519 expanded secret key.
+         * Construct an [SecretKey] from a slice of bytes, corresponding to
+         * an [Ed25519] expanded secret key.
+         * @param byteArray a [ByteArray] used to generate [SecretKey]
+         * @return A newly constructed [SecretKey] from bytes
          */
         @Throws(SignatureError.BytesLengthError::class)
         fun fromByteArray(byteArray: ByteArray): SecretKey {
@@ -40,7 +42,9 @@ class SecretKey(
 
         /**
          * Construct an `SecretKey` from a slice of bytes, corresponding to
-         * an Ed25519 expanded secret key.
+         * an [Ed25519] expanded secret key.
+         * @param byteArray a [ByteArray] used to generate [SecretKey]
+         * A newly constructed [SecretKey] from bytes
          */
         @Throws(SignatureError.BytesLengthError::class)
         fun fromEd25519ByteArray(byteArray: ByteArray): SecretKey {
@@ -62,13 +66,13 @@ class SecretKey(
         }
 
         /**
-         * Generate an "unbiased" `SecretKey` directly, bypassing the `MiniSecretKey` layer.
+         * Generate an "unbiased" [SecretKey] directly, bypassing the [MiniSecretKey] layer.
          */
         fun generate() = generateWith(SecureRandom())
 
         /**
-         * Generate an "unbiased" `SecretKey` directly from a user
-         * supplied `csprng` uniformly, bypassing the `MiniSecretKey`
+         * Generate an "unbiased" [SecretKey] directly from a user
+         * supplied [csprng] uniformly, bypassing the [MiniSecretKey]
          * layer.
          */
         fun <R: Random> generateWith(random: R): SecretKey {
@@ -83,39 +87,39 @@ class SecretKey(
     }
 
     /**
-     * Convert this `SecretKey` into an array of 64 bytes with.
+     * Convert this [SecretKey] into an array of 64 bytes with.
      *
      * Returns an array of 64 bytes, with the first 32 bytes being
      * the secret scalar represented canonically, and the last
-     * 32 bytes being the seed for nonces.
+     * 32 bytes being the seed for [nonces].
      */
     override fun toByteArray() = key.copyOf() + nonce.copyOf()
 
     /**
-     * Convert this `SecretKey` into an array of 64 bytes, corresponding to
+     * Convert this [SecretKey] into an array of 64 bytes, corresponding to
      * an Ed25519 expanded secret key.
      *
      * Returns an array of 64 bytes, with the first 32 bytes being
      * the secret scalar shifted ed25519 style, and the last 32 bytes
-     * being the seed for nonces.
+     * being the seed for [nonces].
      */
     fun toEd25519ByteArray() = multiplyScalarBytesByCofactor(key.copyOf()) + nonce.copyOf()
 
     /**
-     * Derive the `PublicKey` corresponding to this `SecretKey`.
+     * Derive the [PublicKey] corresponding to this [SecretKey].
      */
     fun toPublicKey()
         = PublicKey(RISTRETTO_GENERATOR_TABLE.multiply(key.toScalarFromBits()))
 
     /**
-     * Derive the `PublicKey` corresponding to this `SecretKey`.
+     * Derive the [PublicKey] corresponding to this [SecretKey].
      */
     fun toKeyPair() = KeyPair(this, toPublicKey())
 
     /**
-     * Sign a transcript with this `SecretKey`.
+     * Sign a transcript with this [SecretKey].
      *
-     * Requires a `SigningTranscript`, normally created from a
+     * Requires a [SigningTranscript], normally created from a
      * `SigningContext` and a message, as well as the public key
      * corresponding to `self`.  Returns a Schnorr signature.
      *
@@ -128,6 +132,8 @@ class SecretKey(
 
     /**
      * Sign a message
+     * @param t a signing transcript used to sign a message
+     * @return Created [Signature]
      */
     @Throws(Exception::class)
     override fun sign(t: SigningTranscript): Signature {
@@ -150,6 +156,8 @@ class SecretKey(
 
     /**
      * Sign a message with this `SecretKey`, but double-check the result.
+     * @param t a signing transcript used to sign a message
+     * @return Created [Signature]
      */
     @Throws(Exception::class)
     override fun signDoubleCheck(t: SigningTranscript): Signature {
@@ -163,6 +171,9 @@ class SecretKey(
 
     /**
      * Sign a message with this `SecretKey`.
+     * @param context the current context
+     * @param message to sign
+     * @return Created [Signature]
      */
     @Throws(Exception::class)
     override fun signSimple(context: ByteArray, message: ByteArray): Signature {
@@ -171,7 +182,10 @@ class SecretKey(
     }
 
     /**
-     * Sign a message with this `SecretKey`, but double-check the result.
+     * Sign a message with this `SecretKey`, but double-check the result
+     * @param context the current context
+     * @param message to sign
+     * @return Created [Signature]
      */
     @Throws(Exception::class)
     override fun signSimpleDoubleCheck(context: ByteArray, message: ByteArray): Signature {

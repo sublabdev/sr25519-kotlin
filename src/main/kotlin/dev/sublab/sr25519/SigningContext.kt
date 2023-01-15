@@ -31,6 +31,8 @@ class SigningContext(private val transcript: SigningTranscript) {
 
     /**
      * Initialize an owned signing transcript on a message provided as a byte array.
+     * @param bytes a [ByteArray] (message) used to create an owned signing transcript
+     * @return signing transcript
      *
      * Avoid this method when processing large slices because it calls `Transcript.appendMessage` directly
      * and `merlin` is designed for domain separation, not performance.
