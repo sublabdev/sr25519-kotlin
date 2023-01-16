@@ -35,6 +35,10 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.dokkaHtml.configure {
+    outputDirectory.set(projectDir.resolve("reference"))
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
