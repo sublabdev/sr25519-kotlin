@@ -1,9 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.21"
-    kotlin("plugin.serialization") version "1.7.21"
+    kotlin("jvm")
+    kotlin("plugin.serialization")
     `maven-publish`
+    id("org.jetbrains.dokka")
 }
 
 group = "dev.sublab"
@@ -15,12 +16,19 @@ repositories {
     maven { url = uri("https://repo.repsy.io/mvn/chrynan/public") } // Kotlin SecureRandom
 }
 
+val dokkaVersion: String by project
+val commonVersion: String by project
+val hashingVersion: String by project
+val curve25519Version: String by project
+val kryptVersion: String by project
+
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("dev.sublab:common-kotlin:1.0.0")
-    implementation("dev.sublab:hashing-kotlin:1.0.0")
-    implementation("dev.sublab:curve25519-kotlin:1.0.0")
-    implementation("com.chrynan.krypt:krypt-csprng:0.2.1")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:$dokkaVersion")
+    implementation("dev.sublab:common-kotlin:$commonVersion")
+    implementation("dev.sublab:hashing-kotlin:$hashingVersion")
+    implementation("dev.sublab:curve25519-kotlin:$curve25519Version")
+    implementation("com.chrynan.krypt:krypt-csprng:$kryptVersion")
 }
 
 tasks.test {
