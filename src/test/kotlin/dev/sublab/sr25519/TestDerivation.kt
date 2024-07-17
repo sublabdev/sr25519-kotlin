@@ -51,12 +51,10 @@ class TestDerivation {
 
         val keyPair = KeyPair.fromByteArray(knownKeyPair)
 
-        println("keypair nonce: ${keyPair.secretKey.nonce.copyOf().hex.encode()}")
 
         // Test direct derivation
         run {
             val derivationResult = keyPair.secretKey.deriveSimple(cc)
-            println("Secret key size: ${derivationResult.secretKey.toByteArray().size}")
             val derivedPublicKey = derivationResult.secretKey.toPublicKey()
             assertContentEquals(expectedPublicKey, derivedPublicKey.toByteArray())
         }
