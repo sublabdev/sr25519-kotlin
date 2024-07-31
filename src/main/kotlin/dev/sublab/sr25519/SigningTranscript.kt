@@ -50,21 +50,32 @@ class SigningTranscript(private val transcript: TranscriptImpl): Transcript {
     }
 
     @Throws(Exception::class)
-    fun witnessScalar(label: ByteArray, nonceSeeds: ByteArray): Scalar {
+    fun witnessScalar(label: ByteArray, nonceSeeds: Array<ByteArray>): Scalar {
         val scalarBytes = ByteArray(64)
         witnessBytes(label, scalarBytes, nonceSeeds)
         return scalarBytes.toScalarBytesModOrderWide()
     }
 
     @Throws(Exception::class)
-    fun witnessBytes(label: ByteArray, dest: ByteArray, nonceSeeds: ByteArray) {
+    fun witnessScalar(label: ByteArray, nonceSeed: ByteArray)
+        = witnessScalar(label, arrayOf(nonceSeed))
+
+    @Throws(Exception::class)
+    fun witnessBytes(label: ByteArray, dest: ByteArray, nonceSeeds: Array<ByteArray>) {
         witnessBytesRng(label, dest, nonceSeeds, SecureRandom())
     }
 
     @Throws(Exception::class)
-    fun <R: Random> witnessBytesRng(label: ByteArray, dest: ByteArray, nonceSeeds: ByteArray, random: R) {
+    fun <R: Random> witnessBytesRng(
+        label: ByteArray,
+        dest: ByteArray,
+        nonceSeeds: Array<ByteArray>,
+        random: R
+    ) {
         var br: TranscriptRngBuilder = transcript.buildRng()
-        br = br.rekeyWithWitnessBytes(label, nonceSeeds)
+        for (nonceSeed in nonceSeeds) {
+            br = br.rekeyWithWitnessBytes(label, nonceSeed)
+        }
         val r = br.finalizeWith(random)
         r.fillBytes(dest)
     }
