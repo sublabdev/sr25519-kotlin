@@ -12,8 +12,8 @@ pluginManagement {
         signing
     }
 
-    val ossrhUsername: String by settings
-    val ossrhPassword: String by settings
-    extra.set("ossrhUsername", ossrhUsername)
-    extra.set("ossrhPassword", ossrhPassword)
+    val ossrhToken: String by settings
+    val ossrhTokenPassword: String by settings
+    extra.set("ossrhToken", ossrhToken)
+    extra.set("ossrhTokenPassword", ossrhTokenPassword)
 }
